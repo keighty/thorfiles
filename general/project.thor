@@ -2,7 +2,7 @@
 require "rubygems" # ruby1.9 doesn't "require" it though
 require "thor"
 
-class RubyProject < Thor
+class RbProject < Thor
   desc "init", "creates a ruby project with rspec"
 
   def init(title="newProject")
@@ -11,6 +11,11 @@ class RubyProject < Thor
     Dir.mkdir("spec")
     Dir.mkdir("lib")
     filename = "#{title}"
+
+    open(File.new("README.md", "w"), "w") do |note|
+      note.puts "# #{title}"
+    end
+
     open(File.new("lib/#{filename}.rb", "w"), "w") do |spec|
       spec.puts "class #{title.capitalize}"
       spec.puts "end"
@@ -24,6 +29,13 @@ class RubyProject < Thor
 
     open(File.new("spec/#{filename}_spec.rb", "w"), "w") do |spec|
       spec.puts "require 'spec_helper'"
+      spec.puts ""
+      spec.puts ""
+      spec.puts "describe #{filename.capitalize} do"
+      spec.puts "before do"
+      spec.puts "end"
+      spec.puts "it 'should pass'"
+      spec.puts "end"
     end
   end
 end
