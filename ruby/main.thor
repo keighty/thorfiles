@@ -3,12 +3,13 @@ require "thor"
 class Ruby < Thor::Group # Thor::Group executes all methods at the same time
   include Thor::Actions
 
-  # This will make template write into the directory where the thor command was issued
+  # This will make template writes into the directory where the thor command was issued
   def self.source_root
     File.dirname(__FILE__)
   end
 
   desc "generate a simple sinatra config"
+
   argument :name
   class_option :test_framework
 
