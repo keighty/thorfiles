@@ -17,12 +17,24 @@ class RbProject < Thor
     end
 
     open(File.new("Gemfile", "w"), "w") do |my_gem|
-      my_gem.puts "ruby 2.0.0"
-      my_gem.puts "gem rspec"
+      my_gem.puts "ruby '2.0.0'"
+      my_gem.puts "gem 'rspec'"
+    end
+
+    open(File.new(filename, "w"), "w") do |launcher|
+      launcher.puts "#!/usr/bin/env ruby"
+      launcher.puts "# #{filename}"
+      launcher.puts "# #{Time.now.strftime("%d-%b-%Y")}"
+      launcher.puts "#"
+      launcher.puts "# Usage:"
+      launcher.puts "#"
+      launcher.puts "$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))"
+      launcher.puts "require '#{filename}'"
+      launcher.puts "#{camelize(filename)}.new"
     end
 
     open(File.new("lib/#{filename}.rb", "w"), "w") do |spec|
-      spec.puts "class #{camelize(title)}"
+      spec.puts "class #{camelize(filename)}"
       spec.puts "end"
     end
 
@@ -35,10 +47,8 @@ class RbProject < Thor
     open(File.new("spec/#{filename}_spec.rb", "w"), "w") do |spec|
       spec.puts "require 'spec_helper'"
       spec.puts ""
-      spec.puts ""
       spec.puts "describe #{camelize(filename)} do"
       spec.puts "  before (:each) {  }"
-      spec.puts "  subject {  }"
       spec.puts "  xit 'should pass'"
       spec.puts "end"
     end
